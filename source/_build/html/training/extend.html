@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>通过 Conda 扩展 SageMaker 容器 &mdash; ml-guide 0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="prev" title="使用 EC2 进行深度学习" href="ec2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ml-guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">模型训练</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ec2.html">使用 EC2 进行深度学习</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">通过 Conda 扩展 SageMaker 容器</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">镜像的内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">镜像的地址</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">访问镜像</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">生成镜像</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">使用镜像</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ml-guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>通过 Conda 扩展 SageMaker 容器</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/training/extend.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="conda-sagemaker">
+<h1><a class="toc-backref" href="#id7">通过 Conda 扩展 SageMaker 容器</a><a class="headerlink" href="#conda-sagemaker" title="永久链接至标题"></a></h1>
+<p>Sagemaker 在训练和推理时，会按您在 Estimator 中的配置，指定指定规格和指定数量的实例，然后加载运行指定的 docker 镜像。</p>
+<div class="contents topic" id="id1">
+<p class="topic-title">目录</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#conda-sagemaker" id="id7">通过 Conda 扩展 SageMaker 容器</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id8">镜像的内容</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id9">镜像的地址</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id10">访问镜像</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id11">生成镜像</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id12">使用镜像</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="id2">
+<h2><a class="toc-backref" href="#id8">镜像的内容</a><a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>官方镜像内容可以在 <a class="reference external" href="https://github.com/aws/deep-learning-containers/">github</a> 找到，比如 PyTorch 1.10 用于训练、支持 GPU 的镜像在 <a class="reference external" href="https://github.com/aws/deep-learning-containers/blob/master/pytorch/training/docker/1.10/py3/cu113/Dockerfile.sagemaker.gpu">https://github.com/aws/deep-learning-containers/blob/master/pytorch/training/docker/1.10/py3/cu113/Dockerfile.sagemaker.gpu</a>。
+在这个 Dockfile 中我们可以清楚的知道，这个 docker 镜像具体包含了哪些内容。</p>
+</section>
+<section id="id3">
+<h2><a class="toc-backref" href="#id9">镜像的地址</a><a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>在 <a class="reference external" href="https://github.com/aws/deep-learning-containers/blob/master/available_images.md">github</a> 页面提供了 AWS 不同区域 ECR 镜像地址。
+其中，中国宁夏的基础地址是 <code class="docutils literal notranslate"><span class="pre">727897471807.dkr.ecr.cn-northwest-1.amazonaws.com.cn/&lt;repository-name&gt;:&lt;image-tag&gt;</span></code>
+再在下面找到镜像的名称和 tag ，中国区域镜像更新有时稍晚，我们可以选用一个较早版本的镜像，比如 <code class="docutils literal notranslate"><span class="pre">763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.8.1-gpu-py36-cu111-ubuntu18.04</span></code>
+然后把两者进行拼接，用国内的 endpoint 地址，再接上指定的镜像名称和 tag，结果像  <code class="docutils literal notranslate"><span class="pre">727897471807.dkr.ecr.cn-northwest-1.amazonaws.com.cn/pytorch-training:1.8.1-gpu-psy36-cu111-ubuntu18.04</span></code></p>
+</section>
+<section id="id4">
+<h2><a class="toc-backref" href="#id10">访问镜像</a><a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>在已经安装了 docker，并且配置了 AWS 访问凭据的机器上执行以下命令。Sagemaker Studio 未提供 docker，Notebook instance 已经自带 docker，或者运行 Deep Learning AMI 的 EC2，或者您本地计算机。
+Notebook Instance 根卷只有 120GB，已占用 108GB，如果需要处理复杂的镜像，建议在 EC2 上进行。
+本地计算机需要通过 AWS configure 配置 AWS 凭据，AWS 资源可以通过 role 来取得临时 token。确保他们包含 ECR 读取权限。Notebook instance 一般会配置 SageMaker ExecutionRole ，它会具备 SageMakerFullAccess 策略，其中已经包含 ECR 访问权限。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws ecr get-login-password --region cn-northwest-1 <span class="p">|</span> docker login --username AWS --password-stdin <span class="m">727897471807</span>.dkr.ecr.cn-northwest-1.amazonaws.com.cn
+</pre></div>
+</div>
+<p>如果命令成功返回，可以尝试拉取镜像</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull <span class="m">727897471807</span>.dkr.ecr.cn-northwest-1.amazonaws.com.cn/pytorch-training:1.8.1-gpu-py36-cu111-ubuntu18.04
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2><a class="toc-backref" href="#id11">生成镜像</a><a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p>新建一个目录，目录中创建一个新文件 Dockerfile，内容如下</p>
+<div class="highlight-Dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">From</span> <span class="s">727897471807.dkr.ecr.cn-northwest-1.amazonaws.com.cn/pytorch-training:1.8.1-gpu-py36-cu111-ubuntu18.04</span>
+<span class="k">RUN</span> conda install -y -c conda-forge faiss-gpu
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sagemaker_customized_image</span></code> 是镜像名称，如果使用 SageMaker ExecutionRole，镜像名称必须包含 <strong>sagemaker</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build -t sagemaker_customized_image .
+</pre></div>
+</div>
+<p>完成后在 ECR 中创建一个 repository</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws ecr create-repository <span class="se">\</span>
+    --repository-name sagemaker_customized_image <span class="se">\</span>
+    --image-scanning-configuration <span class="nv">scanOnPush</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    --region cn-northwest-1
+</pre></div>
+</div>
+<p>获取您自己 ECR 的访问权限，替换 aws_account_id 为您的 AWS账号ID，</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>aws ecr get-login-password --region cn-northwest-1 <span class="p">|</span> docker login --username AWS --password-stdin aws_account_id.dkr.ecr.cn-northwest-1.amazonaws.com.cn
+</pre></div>
+</div>
+<p>推送 docker 镜像到您的 ECR 中</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker tag sagemaker_customized_image aws_account_id.dkr.ecr.cn-northwest-1.amazonaws.com.cn/sagemaker_customized_image:20211118
+docker push aws_account_id.dkr.ecr.cn-northwest-1.amazonaws.com.cn/sagemaker_customized_image:20211118
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2><a class="toc-backref" href="#id12">使用镜像</a><a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>在 Estimator 中去掉 <strong>framework_version</strong> 和 <strong>py_version</strong>，改使用 <strong>image_uri</strong> 来指定上来的 ECR 镜像地址。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pytorch_estimator</span> <span class="o">=</span> <span class="n">PyTorch</span><span class="p">(</span><span class="n">entry_point</span><span class="o">=</span><span class="s1">&#39;pytorch-train.py&#39;</span><span class="p">,</span>
+                            <span class="n">instance_type</span><span class="o">=</span><span class="s1">&#39;ml.p3.2xlarge&#39;</span><span class="p">,</span>
+                            <span class="n">instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">image_uri</span><span class="o">=</span><span class="s1">&#39;aws_account_id.dkr.ecr.cn-northwest-1.amazonaws.com.cn/sagemaker_customized_image:20211118&#39;</span>
+                            <span class="n">hyperparameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;epochs&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;batch-size&#39;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s1">&#39;learning-rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ec2.html" class="btn btn-neutral float-left" title="使用 EC2 进行深度学习" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2021, Hao.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>使用 EC2 进行深度学习 &mdash; ml-guide 0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="通过 Conda 扩展 SageMaker 容器" href="extend.html" />
+    <link rel="prev" title="欢迎来到 AWS Machine Learning 快速导引" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ml-guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">模型训练</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">使用 EC2 进行深度学习</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">添加账单通知邮箱</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#amazon-systems-manager">打开 Amazon Systems Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameter">创建一个 Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">填写邮箱地址</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cloudformation">部署 CloudFormation 模板</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">下载 CloudFormation 模板</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cloudformation-cloudformation">在 CloudFormation 控制台部署 CloudFormation 模板</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">选择模板文件</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stack">指定 Stack 名称</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">确定提交</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">访问 EC2 实例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#session-mangager">打开 Session Mangager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu">切换到 ubuntu 用户</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ssh">添加 SSH 公钥</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jupyter-notebook">修改 Jupyter Notebook 密码</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">启动 Jupyter Notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">连接到 Jupyter Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id10">删除资源</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extend.html">通过 Conda 扩展 SageMaker 容器</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ml-guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>使用 EC2 进行深度学习</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/training/ec2.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ec2">
+<h1><a class="toc-backref" href="#id11">使用 EC2 进行深度学习</a><a class="headerlink" href="#ec2" title="永久链接至标题"></a></h1>
+<p>您可以使用我们提供的 CloudFormation 模板，快速创建一台拥有 NVidia V100 GPU 的 <strong>P3</strong> 实例，并使用 Jupyter Notebook 开始您的深度学习过程。
+我们目前提供中国宁夏区域的部署模板。</p>
+<div class="contents topic" id="id1">
+<p class="topic-title">目录</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ec2" id="id11">使用 EC2 进行深度学习</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id12">添加账单通知邮箱</a></p>
+<ul>
+<li><p><a class="reference internal" href="#amazon-systems-manager" id="id13">打开 Amazon Systems Manager</a></p></li>
+<li><p><a class="reference internal" href="#parameter" id="id14">创建一个 Parameter</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id15">填写邮箱地址</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#cloudformation" id="id16">部署 CloudFormation 模板</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id17">下载 CloudFormation 模板</a></p></li>
+<li><p><a class="reference internal" href="#cloudformation-cloudformation" id="id18">在 CloudFormation 控制台部署 CloudFormation 模板</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id19">选择模板文件</a></p></li>
+<li><p><a class="reference internal" href="#stack" id="id20">指定 Stack 名称</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id21">确定提交</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id7" id="id22">访问 EC2 实例</a></p>
+<ul>
+<li><p><a class="reference internal" href="#session-mangager" id="id23">打开 Session Mangager</a></p></li>
+<li><p><a class="reference internal" href="#ubuntu" id="id24">切换到 ubuntu 用户</a></p></li>
+<li><p><a class="reference internal" href="#ssh" id="id25">添加 SSH 公钥</a></p></li>
+<li><p><a class="reference internal" href="#jupyter-notebook" id="id26">修改 Jupyter Notebook 密码</a></p></li>
+<li><p><a class="reference internal" href="#id8" id="id27">启动 Jupyter Notebook</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id28">连接到 Jupyter Notebook</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id10" id="id29">删除资源</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="id2">
+<h2><a class="toc-backref" href="#id12">添加账单通知邮箱</a><a class="headerlink" href="#id2" title="永久链接至标题"></a></h2>
+<p>为了避免您的账单超出预期，我们在 CloudFormation 模板中设置了一个费用告警，当月费用达到 RMB10000 的 70%，也即 7000元时，会往您提供的邮箱中发送一封邮件。邮箱地址需要先添加到 Amazon Systems Manager 的 Parameter Store 中。
+以下展示如何添加邮箱地址到 Parameter Store。</p>
+<section id="amazon-systems-manager">
+<h3><a class="toc-backref" href="#id13">打开 Amazon Systems Manager</a><a class="headerlink" href="#amazon-systems-manager" title="永久链接至标题"></a></h3>
+<p><img alt="Image1:" src="../_images/1.png" /></p>
+</section>
+<section id="parameter">
+<h3><a class="toc-backref" href="#id14">创建一个 Parameter</a><a class="headerlink" href="#parameter" title="永久链接至标题"></a></h3>
+<p><img alt="Image2:" src="../_images/2.png" /></p>
+</section>
+<section id="id3">
+<h3><a class="toc-backref" href="#id15">填写邮箱地址</a><a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>Parameter 名称必须是 <strong>email</strong>，在 <strong>Value</strong> 中填入邮箱地址，其它保持默认。</p>
+<p><img alt="Image3:" src="../_images/3.png" /></p>
+</section>
+</section>
+<section id="cloudformation">
+<h2><a class="toc-backref" href="#id16">部署 CloudFormation 模板</a><a class="headerlink" href="#cloudformation" title="永久链接至标题"></a></h2>
+<section id="id4">
+<h3><a class="toc-backref" href="#id17">下载 CloudFormation 模板</a><a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>右键点击`这个地址 &lt;<a class="reference external" href="https://www.kiking.team/CdkMlStack.template.json">https://www.kiking.team/CdkMlStack.template.json</a>&gt;`__，将其另存为，保存到本地计算机。</p>
+</section>
+<section id="cloudformation-cloudformation">
+<h3><a class="toc-backref" href="#id18">在 CloudFormation 控制台部署 CloudFormation 模板</a><a class="headerlink" href="#cloudformation-cloudformation" title="永久链接至标题"></a></h3>
+<p>打开 <a class="reference external" href="https://cn-northwest-1.console.amazonaws.cn/cloudformation">宁夏区域 CloudFormation 控制台</a>， 创建一个 Stack。</p>
+<p><img alt="Image4:" src="../_images/4.png" /></p>
+</section>
+<section id="id5">
+<h3><a class="toc-backref" href="#id19">选择模板文件</a><a class="headerlink" href="#id5" title="永久链接至标题"></a></h3>
+<p>选择 <strong>Upload a template file</strong>，选择刚下载的模板文件。</p>
+<p><img alt="Image5:" src="../_images/5.png" /></p>
+</section>
+<section id="stack">
+<h3><a class="toc-backref" href="#id20">指定 Stack 名称</a><a class="headerlink" href="#stack" title="永久链接至标题"></a></h3>
+<p>给 Stack 指点一个方便记忆的名称。其它不变。</p>
+<p><img alt="Image6:" src="../_images/6.png" /></p>
+</section>
+<section id="id6">
+<h3><a class="toc-backref" href="#id21">确定提交</a><a class="headerlink" href="#id6" title="永久链接至标题"></a></h3>
+<p>保持默认选项，一直选择 <strong>Next</strong>，在最后的 Review 页面，勾选 <em>I acknowledge that Amazon CloudFormation might create IAM resources</em>。然后点击 <strong>Create Stack</strong>。等待部署完成。</p>
+<p><img alt="Image7:" src="../_images/7.png" /></p>
+</section>
+</section>
+<section id="id7">
+<h2><a class="toc-backref" href="#id22">访问 EC2 实例</a><a class="headerlink" href="#id7" title="永久链接至标题"></a></h2>
+<section id="session-mangager">
+<h3><a class="toc-backref" href="#id23">打开 Session Mangager</a><a class="headerlink" href="#session-mangager" title="永久链接至标题"></a></h3>
+<p>回到 Amazon Systems Manager，打开 Session Manager，开始一个 Session。</p>
+<p><img alt="Image8:" src="../_images/8.png" /></p>
+<p>在实例列表中，选中名为 <strong>DeepLearning</strong> 的实例，点击 Start Session</p>
+<p><img alt="Image9:" src="../_images/9.png" /></p>
+</section>
+<section id="ubuntu">
+<h3><a class="toc-backref" href="#id24">切换到 ubuntu 用户</a><a class="headerlink" href="#ubuntu" title="永久链接至标题"></a></h3>
+<p>会在一个新标签名中打开 Shell 窗口，在提示符后输入以下命令切换到 <strong>ubuntu</strong> 用户。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo su ubuntu
+</pre></div>
+</div>
+</section>
+<section id="ssh">
+<h3><a class="toc-backref" href="#id25">添加 SSH 公钥</a><a class="headerlink" href="#ssh" title="永久链接至标题"></a></h3>
+<p>修改 <strong>authorized_keys</strong> 文件，把您的 SSH 公钥添加到其中，每个公钥一行。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nano ~/.ssh/authorized_keys
+</pre></div>
+</div>
+</section>
+<section id="jupyter-notebook">
+<h3><a class="toc-backref" href="#id26">修改 Jupyter Notebook 密码</a><a class="headerlink" href="#jupyter-notebook" title="永久链接至标题"></a></h3>
+<p>执行以下命令，连续输入两次相同密码</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter notebook password
+</pre></div>
+</div>
+<p>正确设置后，会告知密码保存位置：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Enter</span> <span class="n">password</span><span class="p">:</span>
+<span class="n">Verify</span> <span class="n">password</span><span class="p">:</span>
+<span class="p">[</span><span class="n">NotebookPasswordApp</span><span class="p">]</span> <span class="n">Wrote</span> <span class="n">hashed</span> <span class="n">password</span> <span class="n">to</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">/.</span><span class="n">jupyter</span><span class="o">/</span><span class="n">jupyter_notebook_config</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3><a class="toc-backref" href="#id27">启动 Jupyter Notebook</a><a class="headerlink" href="#id8" title="永久链接至标题"></a></h3>
+<p>建议在一个 <strong>tmux</strong> 进程中启动 Jupyter Notebook</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tmux
+jupyter notebook
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h3><a class="toc-backref" href="#id28">连接到 Jupyter Notebook</a><a class="headerlink" href="#id9" title="永久链接至标题"></a></h3>
+<p>以 macOS 为例，</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh -i 私钥文件 -N -f -L <span class="m">8080</span>:localhost:8888 ubuntu@EC2公网地址
+</pre></div>
+</div>
+<p>确认 SSH 连接到 EC2。然后在浏览器地址栏输入 <a class="reference external" href="http://127.0.0.1:8080">http://127.0.0.1:8080</a> 打开 Jupyte Notebook。输入刚设置的密码，您就可以开始使用 Jupyter Notebook 了。</p>
+<p><img alt="Image10:" src="../_images/10.png" /></p>
+<p>更多 Deep Learning AMI 的介绍，请参考 <a class="reference external" href="https://docs.aws.amazon.com/dlami/latest/devguide/what-is-dlami.html">这里</a></p>
+</section>
+</section>
+<section id="id10">
+<h2><a class="toc-backref" href="#id29">删除资源</a><a class="headerlink" href="#id10" title="永久链接至标题"></a></h2>
+<p>测试完毕后，回到 CloudFormation 控制台页面，选中 <strong>DeepLearning</strong> 这个 Stack，点击 <strong>Delete</strong> ，所有资源即可被清除。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="欢迎来到 AWS Machine Learning 快速导引" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="extend.html" class="btn btn-neutral float-right" title="通过 Conda 扩展 SageMaker 容器" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2021, Hao.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
