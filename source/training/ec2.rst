@@ -37,28 +37,33 @@ Parameter 名称必须是 **email**，在 **Value** 中填入邮箱地址，其�
 
 下载 CloudFormation 模板
 =================================
-右键点击`这个地址 <https://www.kiking.team/CdkMlStack.template.json>`__，将其另存为，保存到本地计算机。
+
+右键点击 `这个地址 <https://www.kiking.team/CdkMlStack.template.json>`__，将其另存为，保存到本地计算机。
 
 在 CloudFormation 控制台部署 CloudFormation 模板
 ==================================================================
+
 打开 `宁夏区域 CloudFormation 控制台 <https://cn-northwest-1.console.amazonaws.cn/cloudformation>`__， 创建一个 Stack。
 
 |Image4:|
 
 选择模板文件
 =================================
+
 选择 **Upload a template file**，选择刚下载的模板文件。
 
 |Image5:|
 
 指定 Stack 名称
 =================================
+
 给 Stack 指点一个方便记忆的名称。其它不变。
 
 |Image6:|
 
 确定提交
 =================================
+
 保持默认选项，一直选择 **Next**，在最后的 Review 页面，勾选 *I acknowledge that Amazon CloudFormation might create IAM resources*。然后点击 **Create Stack**。等待部署完成。
 
 |Image7:|
@@ -69,6 +74,7 @@ Parameter 名称必须是 **email**，在 **Value** 中填入邮箱地址，其�
 
 打开 Session Mangager
 =================================
+
 回到 Amazon Systems Manager，打开 Session Manager，开始一个 Session。
 
 |Image8:|
@@ -97,6 +103,7 @@ Parameter 名称必须是 **email**，在 **Value** 中填入邮箱地址，其�
 
 修改 Jupyter Notebook 密码
 =================================
+
 执行以下命令，连续输入两次相同密码
 
 .. code:: bash
