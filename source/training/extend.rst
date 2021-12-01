@@ -80,7 +80,7 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 容器中测试
 ------------
 
-先在镜像中测试一下安装命令是否能够成功运行，先启动并进入镜像。
+先在镜像中测试一下安装命令是否能够成功运行，先启动并进入容器。
 
 .. code:: bash
 
@@ -139,7 +139,11 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 使用镜像
 =================
 
+<<<<<<< HEAD
 启动一个 带GPU的SageMaker Notebook Instance，运行以下代码。
+=======
+启动一个 SageMaker Notebook Instance，选择PyTorch内核，运行以下代码。
+>>>>>>> 0e983da3ee133641db86784faac77e7bf9398e3e
 先创建一个源代码目录。
 
 .. code:: bash
@@ -153,7 +157,7 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 
     !pip install 'sagemaker[local]' --upgrade
 
-在本地执行示例代码。 其中 ``source_dir`` 必须使用绝对地址。
+在本地执行示例代码。 其中 ``source_dir`` 必须使用绝对地址，``aws_account_id``替换为自己的AWS账号id。
 
 .. code:: python
 
@@ -253,7 +257,7 @@ pip 安装依赖包
 
     python3 mnist_nn_conv.py
 
-测试通过后，我们开始构建镜像， ``Dockfile`` 内容如下：
+测试通过后，退出容器，我们开始构建镜像， ``Dockfile`` 内容如下：
 
 .. code:: Dockerfile
 
