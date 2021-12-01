@@ -253,7 +253,7 @@ pip 安装依赖包
 
     python3 mnist_nn_conv.py
 
-测试通过后，我们开始构建镜像， ``Dockfile`` 内容如下：
+测试通过后，退出容器，我们开始构建镜像， ``Dockfile`` 内容如下：
 
 .. code:: Dockerfile
 
