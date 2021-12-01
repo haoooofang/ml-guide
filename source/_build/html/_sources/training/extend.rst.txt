@@ -39,7 +39,7 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 需要先给 EC2 实例相应的 ECR 操作权限。
 
 .. code:: json
-    
+
     {
         "Version": "2012-10-17",
         "Statement": [
@@ -142,14 +142,14 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 启动一个 SageMaker Notebook Instance，运行以下代码。
 先创建一个源代码目录。
 
-.. code:: jupyter
+.. code:: bash
 
     !mkdir code
 
 把 `示例代码 <https://github.com/facebookresearch/faiss/blob/main/tutorial/python/1-Flat.py>`__ 复制到 ``code`` 目录，并重命名为 ``flat.py``。
 安装 SageMaker 本地扩展。
 
-.. code:: jupyter
+.. code:: bash
 
     !pip install 'sagemaker[local]' --upgrade
 
@@ -264,7 +264,7 @@ pip 安装依赖包
      && pip install --no-cache-dir -U torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.10.0+cu113.html
 
 在推送到宁夏 ECR 之前，我们需要先去掉亚马逊云科技海外区域的访问凭据或者使用国内的访问凭据进行覆盖， ``awscli`` 配置的话，需要重新运行 ``aws configure``。
-然后就可以和上面的步骤一样，先获取 ECR 凭据，然后推送镜像，进行本地测试和云端测试了。
+然后就可以和上面的步骤一样，先获取 ECR 凭据，然后推送镜像，进行云端测试了。pyg 生成的镜像比较大，Notebook Instance 根卷剩余空间不够进行本地测试。
 
 在上面的示例里面，我们介绍了如何通过 conda 和 pip 来扩展已有的 PyTorch 镜像，如何从海外区域获得国内区域暂时未上线的镜像，以及怎么使用 SageMaker local 模式在本地进行镜像测试。
 可以看到，SageMaker 非常灵活，可以根据使用场景不同，对其进行灵活的定制以满足我们的使用要求。

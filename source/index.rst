@@ -13,5 +13,5 @@
    :caption: 模型训练
 
    使用 EC2 进行深度学习 <training/ec2>
-   通过 Conda 扩展 SageMaker 容器 <training/extend>
+   扩展 SageMaker PyTorch 容器 <training/extend>
 

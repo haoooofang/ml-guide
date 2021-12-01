@@ -142,14 +142,14 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 启动一个 SageMaker Notebook Instance，运行以下代码。
 先创建一个源代码目录。
 
-.. code:: jupyter
+.. code:: bash
 
     !mkdir code
 
 把 `示例代码 <https://github.com/facebookresearch/faiss/blob/main/tutorial/python/1-Flat.py>`__ 复制到 ``code`` 目录，并重命名为 ``flat.py``。
 安装 SageMaker 本地扩展。
 
-.. code:: jupyter
+.. code:: bash
 
     !pip install 'sagemaker[local]' --upgrade
 

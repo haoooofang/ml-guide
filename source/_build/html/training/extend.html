@@ -40,7 +40,7 @@
               <p class="caption" role="heading"><span class="caption-text">模型训练</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="ec2.html">使用 EC2 进行深度学习</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">通过 Conda 扩展 SageMaker 容器</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">扩展 SageMaker PyTorch 容器</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">原来镜像的内容</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">镜像的地址</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id4">访问镜像</a></li>
@@ -209,12 +209,12 @@ docker push aws_account_id.dkr.ecr.cn-northwest-1.amazonaws.com.cn/sagemaker-cus
 <h2><a class="toc-backref" href="#id16">使用镜像</a><a class="headerlink" href="#id8" title="永久链接至标题"></a></h2>
 <p>启动一个 SageMaker Notebook Instance，运行以下代码。
 先创建一个源代码目录。</p>
-<div class="highlight-jupyter notranslate"><div class="highlight"><pre><span></span>!mkdir code
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>!mkdir code
 </pre></div>
 </div>
 <p>把 <a class="reference external" href="https://github.com/facebookresearch/faiss/blob/main/tutorial/python/1-Flat.py">示例代码</a> 复制到 <code class="docutils literal notranslate"><span class="pre">code</span></code> 目录，并重命名为 <code class="docutils literal notranslate"><span class="pre">flat.py</span></code>。
 安装 SageMaker 本地扩展。</p>
-<div class="highlight-jupyter notranslate"><div class="highlight"><pre><span></span>!pip install &#39;sagemaker[local]&#39; --upgrade
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>!pip install <span class="s1">&#39;sagemaker[local]&#39;</span> --upgrade
 </pre></div>
 </div>
 <p>在本地执行示例代码。 其中 <code class="docutils literal notranslate"><span class="pre">source_dir</span></code> 必须使用绝对地址。</p>
@@ -310,7 +310,7 @@ python -c <span class="s2">&quot;import torch; print(torch.version.cuda)&quot;</
 </pre></div>
 </div>
 <p>在推送到宁夏 ECR 之前，我们需要先去掉亚马逊云科技海外区域的访问凭据或者使用国内的访问凭据进行覆盖， <code class="docutils literal notranslate"><span class="pre">awscli</span></code> 配置的话，需要重新运行 <code class="docutils literal notranslate"><span class="pre">aws</span> <span class="pre">configure</span></code>。
-然后就可以和上面的步骤一样，先获取 ECR 凭据，然后推送镜像，进行本地测试和云端测试了。</p>
+然后就可以和上面的步骤一样，先获取 ECR 凭据，然后推送镜像，进行云端测试了。pyg 生成的镜像比较大，Notebook Instance 根卷剩余空间不够进行本地测试。</p>
 <p>在上面的示例里面，我们介绍了如何通过 conda 和 pip 来扩展已有的 PyTorch 镜像，如何从海外区域获得国内区域暂时未上线的镜像，以及怎么使用 SageMaker local 模式在本地进行镜像测试。
 可以看到，SageMaker 非常灵活，可以根据使用场景不同，对其进行灵活的定制以满足我们的使用要求。</p>
 </section>
