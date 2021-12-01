@@ -80,7 +80,7 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 容器中测试
 ------------
 
-先在镜像中测试一下安装命令是否能够成功运行，先启动并进入镜像。
+先在镜像中测试一下安装命令是否能够成功运行，先启动并进入容器。
 
 .. code:: bash
 
@@ -153,7 +153,7 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 
     !pip install 'sagemaker[local]' --upgrade
 
-在本地执行示例代码。 其中 ``source_dir`` 必须使用绝对地址。
+在本地执行示例代码。 其中 ``source_dir`` 必须使用绝对地址，``aws_account_id``替换为自己的AWS账号id。
 
 .. code:: python
 
