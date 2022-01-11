@@ -147,11 +147,6 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
     !mkdir code
 
 把 `示例代码 <https://github.com/facebookresearch/faiss/blob/main/tutorial/python/1-Flat.py>`__ 复制到 ``code`` 目录，并重命名为 ``flat.py``。
-安装 SageMaker 本地扩展。
-
-.. code:: bash
-
-    !pip install 'sagemaker[local]' --upgrade
 
 在本地执行示例代码。 其中 ``source_dir`` 必须使用绝对地址， ``aws_account_id`` 替换为自己的AWS账号id。
 
