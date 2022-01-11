@@ -14,4 +14,4 @@
 
    使用 EC2 进行深度学习 <training/ec2>
    扩展 SageMaker PyTorch 容器 <training/extend>
-
+   创建 Notebook Instance <training/notebook>
