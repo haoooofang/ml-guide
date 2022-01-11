@@ -1,5 +1,5 @@
 #########################################
-使用 Notebook Instance 进行深度学习
+创建 Notebook Instance 
 #########################################
 
 使用 SageMaker Notebook Instance 可以快速部署一个托管的 Jupyter 环境，相对于 SageMaker Studio，您有权限访问这个 Instance，因此可以做一些定制化工作。比如通过 Lifecycle 配置来加装依赖的组件。

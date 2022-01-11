@@ -1,5 +1,5 @@
 #########################################
-使用 Notebook Instance 进行深度学习
+创建 Notebook Instance 
 #########################################
 
 使用 SageMaker Notebook Instance 可以快速部署一个托管的 Jupyter 环境，相对于 SageMaker Studio，您有权限访问这个 Instance，因此可以做一些定制化工作。比如通过 Lifecycle 配置来加装依赖的组件。
@@ -23,5 +23,13 @@
 不需要修改任何设置即可成功创建一个 Notebook Instance，但默认设置不一定最优，我们建议您考虑进行修改。
 
 - Notebook instance type. 如果您不需要在 Notebook 以本地模式进行训练（在 Notebook Instance 上进行训练），您可以选择小规格，比如 ml.t3.medium。另外，要记住在 AWS，新实例比旧实例便宜。
-- 
-- Platform identifier. 
+- Platform identifier. 建议选择 notebook-al2-v1，基于 Amazon Linux 2。
+- Additional configuration. 在这里可以指定 Lifecycle 配置和 SageMaker 卷的大小。但您无法修改根卷大小，根卷默认 120 GiB，剩余可用空间大约 18 GiB。
+- Network. 可以为 Notebook Instance 指定 VPC 设置，SageMaker 会在您指定的 VPC 和子网内创建一个 ENI，并套用您指定的安全组。这种设置下，我们建议您禁止 Direct Internet access，但需要这个子网有关联的 NAT Gateway 提供 Intrnet access，并且您指定的安全组允许出站访问。
+
+**************************
+修改 Notebook Instance
+**************************
+
+您可以在停止状态修改 Notebook Instance 配置，停止不需要的 Notebook Instance 也能为您节省成本，但您的 SageMaker 卷仍会有持续费用产生。
+您可以修改实例类型、扩容 SageMaker 卷、替换绑定的 IAM Role等等。
