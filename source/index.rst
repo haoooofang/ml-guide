@@ -15,4 +15,5 @@
    使用 EC2 进行深度学习 <training/ec2>
    创建 SageMaker Notebook Instance <training/notebook>
    使用 Notebook Instance 训练模型 <training/examples>
+   使用 SageMaker 自带算法 <training/builtin-algo>
    扩展 SageMaker PyTorch 容器 <training/extend>

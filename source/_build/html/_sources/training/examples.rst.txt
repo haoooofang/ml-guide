@@ -1,5 +1,5 @@
 #########################################
-开始使用 Notebook Instance
+使用 Notebook Instance 训练模型
 #########################################
 
 最快速掌握 SageMaker 的使用，莫过于从官方示例开始，我们在 https://github.com/aws/amazon-sagemaker-examples 托管了示例 notebooks。另外在 https://sagemaker-examples.readthedocs.io/en/latest/get_started/index.html 提供了说明文档。
