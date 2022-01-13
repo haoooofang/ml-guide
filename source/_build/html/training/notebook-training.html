@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>使用 Notebook Instance 训练模型 &mdash; ml-guide 0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="使用 SageMaker 自带算法" href="builtin-algo.html" />
+    <link rel="prev" title="创建 Notebook Instance" href="launch-notebook.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ml-guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">模型训练</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ec2-training.html">使用 EC2 进行深度学习</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch-notebook.html">创建 SageMaker Notebook Instance</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">使用 Notebook Instance 训练模型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sagemaker-examples-notebook">复制 SageMaker Examples 示例 notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notebook">运行示例 Notebook</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">初始化环境</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">准备数据</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">开始训练</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="builtin-algo.html">使用 SageMaker 自带算法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extend-pytorch.html">扩展 SageMaker PyTorch 容器</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">常见问题解答</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ml-guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>使用 Notebook Instance 训练模型</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/training/notebook-training.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="notebook-instance">
+<h1><a class="toc-backref" href="#id5">使用 Notebook Instance 训练模型</a><a class="headerlink" href="#notebook-instance" title="永久链接至标题"></a></h1>
+<p>最快速掌握 SageMaker 的使用，莫过于从官方示例开始，我们在 <a class="reference external" href="https://github.com/aws/amazon-sagemaker-examples">https://github.com/aws/amazon-sagemaker-examples</a> 托管了示例 notebooks。另外在 <a class="reference external" href="https://sagemaker-examples.readthedocs.io/en/latest/get_started/index.html">https://sagemaker-examples.readthedocs.io/en/latest/get_started/index.html</a> 提供了说明文档。</p>
+<div class="contents topic" id="id1">
+<p class="topic-title">目录</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#notebook-instance" id="id5">使用 Notebook Instance 训练模型</a></p>
+<ul>
+<li><p><a class="reference internal" href="#sagemaker-examples-notebook" id="id6">复制 SageMaker Examples 示例 notebook</a></p></li>
+<li><p><a class="reference internal" href="#notebook" id="id7">运行示例 Notebook</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id8">初始化环境</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id9">准备数据</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id10">开始训练</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="sagemaker-examples-notebook">
+<h2><a class="toc-backref" href="#id6">复制 SageMaker Examples 示例 notebook</a><a class="headerlink" href="#sagemaker-examples-notebook" title="永久链接至标题"></a></h2>
+<p>在 Notebook Instance 控制台页面，点击 <strong>Open JupyterLab</strong> 打开 JupyterLab 页面。
+在菜单栏 <strong>Git</strong> 中，选择 <strong>Clone a Repository</strong>，输入 <a class="reference external" href="https://github.com/aws/amazon-sagemaker-examples.git">https://github.com/aws/amazon-sagemaker-examples.git</a> ，等待复制完成。
+在文件夹中可以看到多了 <strong>amazon-sagemaker-examples</strong> ，您可以浏览子文件夹，选择感兴趣的示例</p>
+</section>
+<section id="notebook">
+<h2><a class="toc-backref" href="#id7">运行示例 Notebook</a><a class="headerlink" href="#notebook" title="永久链接至标题"></a></h2>
+<p>比如我们打开 sagemaker-python-sdk/pytorch_mnist 这个文件夹，双击运行 pytorch_mnist.ipynb 这个 Notebook。
+每个示例 Notebook 都提供了背景说明、示例数据、示例代码。
+有些时候需要安装依赖包，国内区域可以考虑使用加速镜像站，比如使用 <a class="reference external" href="https://mirror.tuna.tsinghua.edu.cn/help/pypi/">清华镜像站</a></p>
+<section id="id2">
+<h3><a class="toc-backref" href="#id8">初始化环境</a><a class="headerlink" href="#id2" title="永久链接至标题"></a></h3>
+<p>后续我们会需要用到三个因素:</p>
+<ul class="simple">
+<li><p>SageMaker session. 用于设置 SageMaker 环境，可以通过传入一个 boto_session 来设置区域、AWS 访问凭据。</p></li>
+<li><p>Bucket. 存储训练结果等。SageMaker 会自动在所在区域创建一个包含您账号 ID 的默认 Bucket。可以通过 <code class="docutils literal notranslate"><span class="pre">sagemaker_session.default_bucket</span></code> 来引用。</p></li>
+<li><p>Role. 之后传递给 SageMaker，让训练实例使用这个 Role 来访问 AWS 资源，比如 S3 Bucket。</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3><a class="toc-backref" href="#id9">准备数据</a><a class="headerlink" href="#id3" title="永久链接至标题"></a></h3>
+<p>一般而言，我们会先把数据存储到 S3，然后在训练时通过 <code class="docutils literal notranslate"><span class="pre">channel</span></code> 指定 S3 路径，训练实例会自动把全部数据复制到特定目录。使用 <strong>管道模式</strong> 可以减少数据加载 <a class="reference external" href="https://aws.amazon.com/blogs/machine-learning/accelerate-model-training-using-faster-pipe-mode-on-amazon-sagemaker/">等待时间</a> 。对速度要求更高的话，可以考虑 <a class="reference external" href="https://aws.amazon.com/cn/blogs/china/use-amazon-fsx-for-lustre-and-amazon-efs-as-data-source-to-speed-up-amazon-sagemaker-training/">Lustre 和 NFS</a></p>
+</section>
+<section id="id4">
+<h3><a class="toc-backref" href="#id10">开始训练</a><a class="headerlink" href="#id4" title="永久链接至标题"></a></h3>
+<p>通过一个 estimator 对象，我们定义训练过程。包括:</p>
+<ul class="simple">
+<li><p>entry_point. 实际训练代码。</p></li>
+<li><p>role. 前面提到的，训练实例可以 assume 的 Role。</p></li>
+<li><p>py_version/framework_version. 如果使用 SageMaker 提供的训练镜像，您只需要指定 Python 和框架版本，SageMaker 会自动查找合适的 ECR 镜像并拉取到训练实例中。</p></li>
+<li><p>instance_count/instance_type. 训练实例数量和规格。训练任务是跑在单独的实例上，这些实例由 SageMaker 管理。</p></li>
+<li><p>hyperparameters. 传递给训练代码的参数。</p></li>
+</ul>
+<p>调用 estimator 的 <code class="docutils literal notranslate"><span class="pre">fit</span></code> 方法开始训练过程，通过 <code class="docutils literal notranslate"><span class="pre">channel</span></code> 指定数据位置。
+可以在 cell 下看到日志输出。与此同时，控制台 <code class="docutils literal notranslate"><span class="pre">Training</span></code> 页面也会出现这个训练任务。在 CloudWatch Logs 中还可以看到不同训练实例办理出的日志信息。</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="launch-notebook.html" class="btn btn-neutral float-left" title="创建 Notebook Instance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="builtin-algo.html" class="btn btn-neutral float-right" title="使用 SageMaker 自带算法" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2021, Hao.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

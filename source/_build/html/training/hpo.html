@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>超参数调优 &mdash; ml-guide 0.1 文档</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/translations.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ml-guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="在文档中搜索" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">模型训练</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ec2-training.html">使用 EC2 进行深度学习</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch-notebook.html">创建 SageMaker Notebook Instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebook-training.html">使用 Notebook Instance 训练模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builtin-algo.html">使用 SageMaker 自带算法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extend-pytorch.html">扩展 SageMaker PyTorch 容器</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">常见问题解答</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ml-guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>超参数调优</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/training/hpo.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1><a class="toc-backref" href="#id7">超参数调优</a><a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<p>SageMaker 可以使用贝叶斯搜索或者随机搜索来寻找超参数的优化组合。
+另外，SageMaker 还有热启动功能，可以通过迁移学习，使用新数据对超参数进行进一步优化。
+示例 Notebook 在 sagemaker examples 中的 <strong>hyperparameter_tuning</strong></p>
+<div class="contents topic" id="id2">
+<p class="topic-title">目录</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#id1" id="id7">超参数调优</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id3" id="id8">确定需要调优的超参</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id9">确定目标度量值</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id10">配置任务</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id11">运行任务</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="id3">
+<h2><a class="toc-backref" href="#id8">确定需要调优的超参</a><a class="headerlink" href="#id3" title="永久链接至标题"></a></h2>
+<p>如果以后要进行热启动，静态和待调优参数总和需一致，所以最好把可能需要优化的参数添加进来。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hyperparameter_ranges</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="n">ContinuousParameter</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
+    <span class="s2">&quot;batch-size&quot;</span><span class="p">:</span> <span class="n">CategoricalParameter</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">]),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2><a class="toc-backref" href="#id9">确定目标度量值</a><a class="headerlink" href="#id4" title="永久链接至标题"></a></h2>
+<p>指定根据哪一个目标值来判断参数的优化组合。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">objective_metric_name</span> <span class="o">=</span> <span class="s2">&quot;average test loss&quot;</span>
+<span class="n">objective_type</span> <span class="o">=</span> <span class="s2">&quot;Minimize&quot;</span>
+<span class="n">metric_definitions</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;average test loss&quot;</span><span class="p">,</span> <span class="s2">&quot;Regex&quot;</span><span class="p">:</span> <span class="s2">&quot;Test set: Average loss: ([0-9</span><span class="se">\\</span><span class="s2">.]+)&quot;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2><a class="toc-backref" href="#id10">配置任务</a><a class="headerlink" href="#id5" title="永久链接至标题"></a></h2>
+<p><strong>estimator</strong> 和平常训练任务的定义一致， <strong>max_jobs</strong> 和 <strong>max_parallel_jobs</strong> 分别指定共进行多少个任务、并发最多多少个任务来搜寻最优组合。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tuner</span> <span class="o">=</span> <span class="n">HyperparameterTuner</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="p">,</span>
+    <span class="n">objective_metric_name</span><span class="p">,</span>
+    <span class="n">hyperparameter_ranges</span><span class="p">,</span>
+    <span class="n">metric_definitions</span><span class="p">,</span>
+    <span class="n">max_jobs</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span>
+    <span class="n">max_parallel_jobs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">objective_type</span><span class="o">=</span><span class="n">objective_type</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2><a class="toc-backref" href="#id11">运行任务</a><a class="headerlink" href="#id6" title="永久链接至标题"></a></h2>
+<p>之后和训练任务一样，调用 <strong>fit</strong> 方法，传入数据。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tuner</span><span class="o">.</span><span class="n">fit</span><span class="p">({</span><span class="s2">&quot;training&quot;</span><span class="p">:</span> <span class="n">inputs</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>在 SageMaker 控制台可以查看到已完成、正在进行的训练数。</p>
+<p><img alt="Image1:" src="../_images/11.png" /></p>
+<p>也可以看到找到的最优参数组合:</p>
+<p><img alt="Image2:" src="../_images/12.png" /></p>
+<p>可以基于优化任务生成模型，也可以部署上线。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">predictor</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">initial_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">instance_type</span><span class="o">=</span><span class="s2">&quot;ml.m4.xlarge&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2021, Hao.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用了 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a>开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

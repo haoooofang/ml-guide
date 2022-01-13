@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="zh-CN" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>索引 &mdash; ml-guide 0.1 文档</title>
+  <title>常见问题解答 &mdash; ml-guide 0.1 文档</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,7 +17,7 @@
         <script src="_static/doctools.js"></script>
         <script src="_static/translations.js"></script>
     <script src="_static/js/theme.js"></script>
-    <link rel="index" title="索引" href="#" />
+    <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" /> 
 </head>
 
@@ -37,15 +38,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">模型训练</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="training/ec2-training.html">使用 EC2 进行深度学习</a></li>
-<li class="toctree-l1"><a class="reference internal" href="training/launch-notebook.html">创建 SageMaker Notebook Instance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="training/notebook-training.html">使用 Notebook Instance 训练模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training/ec2.html">使用 EC2 进行深度学习</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training/notebook.html">创建 SageMaker Notebook Instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training/examples.html">使用 Notebook Instance 训练模型</a></li>
 <li class="toctree-l1"><a class="reference internal" href="training/builtin-algo.html">使用 SageMaker 自带算法</a></li>
-<li class="toctree-l1"><a class="reference internal" href="training/extend-pytorch.html">扩展 SageMaker PyTorch 容器</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">FAQ</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">常见问题解答</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training/extend.html">扩展 SageMaker PyTorch 容器</a></li>
 </ul>
 
         </div>
@@ -62,8 +59,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>索引</li>
+      <li>常见问题解答</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="_sources/faq.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -71,12 +69,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-
-<h1 id="index">索引</h1>
-
-<div class="genindex-jumpbox">
- 
-</div>
+  <section id="id1">
+<h1>常见问题解答<a class="headerlink" href="#id1" title="永久链接至标题"></a></h1>
+<ol class="arabic simple">
+<li><p>国内区域没有 GroundTruth 怎么进行数据标注？
+如果是 CV 用户，可以看看我们的 <a class="reference external" href="https://www.amazonaws.cn/en/solutions/machine-learning-bot/">解决方案</a>。我们也有很多合作伙伴能提供标注服务，请和我们联系。</p></li>
+<li><p>SageMaker 推理没有预留实例，怎么降低成本？
+海外区域有 Savings Plan，可以更灵活的降低成本。另外，您完全可以把模型导出，部署在 EC2、ECS、EKS上，我们推出了 <a class="reference external" href="https://aws.amazon.com/cn/machine-learning/containers/">Deep Learning Containers</a> 方便您快速部署。</p></li>
+<li><p>机型选择有什么建议
+建议用 P3/P4 进行 GPU 训练，C5 进行 CPU 训练/推理，G4/INF1 进行 GPU 推理。</p></li>
+<li><p>Notebook 有些跑不通。
+因为各种上框架和依赖包迭代迅速，有时会出现 API 接口变化、数据存储位置变化等问题，造成 Notebook 跑不通，建议根据最新 API/包 对代码进行调整，也可以联系我们。</p></li>
+</ol>
+</section>
 
 
            </div>
