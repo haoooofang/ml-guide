@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'ml-guide'
-copyright = '2021, Hao'
+copyright = '2022, Patrick and Hao'
 author = 'Hao'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = '0.2'
 
 
 # -- General configuration ---------------------------------------------------
