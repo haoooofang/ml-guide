@@ -2,13 +2,13 @@
 ======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: EC2
 
    使用 EC2 进行深度学习 <ec2/ec2-training>
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: SageMaker
 
    创建 SageMaker Notebook Instance <sagemaker/launch-notebook>
