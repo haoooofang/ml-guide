@@ -86,16 +86,25 @@ Parameter 名称必须是 **email**，在 **Value** 中填入邮箱地址，其�
 切换到 ubuntu 用户
 =================================
 
-会在一个新标签名中打开 Shell 窗口，在提示符后输入以下命令切换到 **ubuntu** 用户。
+会在一个新标签名中打开 Shell 窗口，在提示符后输入以下命令切换到 **ubuntu** 用户, 并切换到用户所在的目录。
 
 .. code:: bash
 
     sudo su ubuntu
+    cd ~
 
 添加 SSH 公钥
 =================================
+在您的个人电脑上生成SSH密钥对，可以全部默认，拷贝。
 
-修改 **authorized_keys** 文件，把您的 SSH 公钥添加到其中，每个公钥一行。
+.. code:: bash
+
+    ssh-keygen -t rsa
+
+执行成功后，找到命令行提示的地址，
+    Your public key has been saved in /Users/xxx/.ssh/id_rsa.pub.
+
+在上一步打开的网页Shell窗口中，修改 **authorized_keys** 文件，把您的 SSH 公钥（id_rsa.pub内容）添加到其中，每个公钥一行。
 
 .. code:: bash
 
@@ -131,11 +140,12 @@ Parameter 名称必须是 **email**，在 **Value** 中填入邮箱地址，其�
 连接到 Jupyter Notebook
 =================================
 
-以 macOS 为例，
+以 macOS 为例，用生成的私钥来登录，将远程的jupyter的8888端口映射到本地的8080端口。
 
 .. code:: bash
 
-    ssh -i 私钥文件 -N -f -L 8080:localhost:8888 ubuntu@EC2公网地址
+    cd /Users/xxx/.ssh
+    ssh -i id_rsa -N -f -L 8080:localhost:8888 ubuntu@EC2公网地址
 
 确认 SSH 连接到 EC2。然后在浏览器地址栏输入 http://127.0.0.1:8080 打开 Jupyte Notebook。输入刚设置的密码，您就可以开始使用 Jupyter Notebook 了。
 
@@ -148,13 +158,13 @@ Parameter 名称必须是 **email**，在 **Value** 中填入邮箱地址，其�
 **************************
 测试完毕后，回到 CloudFormation 控制台页面，选中 **DeepLearning** 这个 Stack，点击 **Delete** ，所有资源即可被清除。
 
-.. |Image1:| image:: ../_static/images/1.png
-.. |Image2:| image:: ../_static/images/2.png
-.. |Image3:| image:: ../_static/images/3.png
-.. |Image4:| image:: ../_static/images/4.png
-.. |Image5:| image:: ../_static/images/5.png
-.. |Image6:| image:: ../_static/images/6.png
-.. |Image7:| image:: ../_static/images/7.png
-.. |Image8:| image:: ../_static/images/8.png
-.. |Image9:| image:: ../_static/images/9.png
-.. |Image10:| image:: ../_static/images/10.png
+.. |Image1:| image:: ../../_static/images/1.png
+.. |Image2:| image:: ../../_static/images/2.png
+.. |Image3:| image:: ../../_static/images/3.png
+.. |Image4:| image:: ../../_static/images/4.png
+.. |Image5:| image:: ../../_static/images/5.png
+.. |Image6:| image:: ../../_static/images/6.png
+.. |Image7:| image:: ../../_static/images/7.png
+.. |Image8:| image:: ../../_static/images/8.png
+.. |Image9:| image:: ../../_static/images/9.png
+.. |Image10:| image:: ../../_static/images/10.png

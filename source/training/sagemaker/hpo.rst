@@ -75,5 +75,5 @@ SageMaker 可以使用贝叶斯搜索或者随机搜索来寻找超参数的优�
     
     predictor = tuner.deploy(initial_instance_count=1, instance_type="ml.m4.xlarge")
 
-.. |Image1:| image:: ../_static/images/11.png
-.. |Image2:| image:: ../_static/images/12.png
+.. |Image1:| image:: ../../_static/images/11.png
+.. |Image2:| image:: ../../_static/images/12.png

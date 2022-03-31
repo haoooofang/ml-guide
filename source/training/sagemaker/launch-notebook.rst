@@ -10,7 +10,8 @@
 添加 Lifecycle 配置
 **************************
 
-与平常的 EC2 实例不一样，Notebook Instance 在停止后，根卷会重置 （SageMaker 卷会保留）。如果您在根卷上安装了应用的话，重启后，需要重新安装。您可以通过 Lifecycle 配置一个脚本，实现自动安装。
+与平常的 EC2 实例不一样，Notebook Instance 在停止后，根卷会重置 （SageMaker 卷会保留,指 /home/ec2-user/SageMaker，默认5GB，可扩容到最多到16TB）。
+如果您在根卷上安装了应用的话，重启后，需要重新安装。您可以通过 Lifecycle 配置一个脚本，实现自动安装。
 
 除此之外，您可以在这里找到更多的 Lifecycle `使用示例。 <https://github.com/aws-samples/amazon-sagemaker-notebook-instance-lifecycle-config-samples>`__ 
 
@@ -31,5 +32,5 @@
 修改 Notebook Instance
 **************************
 
-您可以在停止状态修改 Notebook Instance 配置，停止不需要的 Notebook Instance 也能为您节省成本，但您的 SageMaker 卷仍会有持续费用产生。
+您可以在停止状态修改 Notebook Instance 配置，停止不需要的 Notebook Instance 也能为您节省成本，但您的 SageMaker 卷仍会有持续的存储费用产生。
 您可以修改实例类型、扩容 SageMaker 卷、替换绑定的 IAM Role等等。

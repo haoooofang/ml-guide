@@ -2,7 +2,7 @@
 扩展 SageMaker PyTorch 容器
 #########################################
 
-Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，指定指定规格和指定数量的实例，然后加载运行指定的 Docker 镜像。这些镜像会有不同的来源，包括：
+Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，分配指定规格和指定数量的实例，然后加载运行指定的 Docker 镜像。这些镜像会有不同的来源，包括：
 
 - Amazon SageMaker 自带算法，可以 `通过 image_uris.retrieve 来获取 <https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html>`__ ；
 
@@ -13,6 +13,7 @@ Amazon SageMaker 在训练和推理时，会按您在 Estimator 中的配置，�
 除此之外，很多的时候，我们基于常用框架进行开发，但需要一些依赖包，这些依赖包并未包含在 SageMaker 提供的容器镜像里面，我们需要对这些预置容器镜像进行扩展。
 以 PyTorch 为例，对于自有模块，我们可以和 entry point 文件放置在同一目录下（或者一个 S3 上的 tar.gz 文件），然后在 PyTorch ``source_dir`` 中指定这个目录的位置。
 如果是外部模板，可以通过 ``pip`` 进行扩展。pip 方式非常简单，您在前面提到的 ``source_dir`` 中放置一个 ``requirements.txt``，容器在执行时，会自动安装指定的依赖包。因为在 PyTorch 1.3.1 版本以后，推理时这个文件必须处于 ``code`` 目录中，所以我们建议使用 ``code`` 作为 ``source_dir`` 目录名。
+说明：source_dir是初始化 estimator = PyTorch(...)中该构造函数的一个参数。
 
 另外，我们也可以对 SageMaker 提供的 Docker 镜像进行扩展，通过 pip 或者 conda 安装依赖包，然后生成一个自定义镜像，但仍然以 PyTorch 这个 Estimator 来调用。这种方式的优点是减少了训练或者推理时的依赖包安装时间，比完全自定义镜像又来得简便些。以下我们就以在宁夏区域通过 conda 和 pip  添加 ``faiss`` 和 ``pyg`` 扩展包为例进行讲解。
 

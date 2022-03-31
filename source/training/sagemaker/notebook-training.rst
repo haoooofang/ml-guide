@@ -3,6 +3,7 @@
 #########################################
 
 最快速掌握 SageMaker 的使用，莫过于从官方示例开始，我们在 https://github.com/aws/amazon-sagemaker-examples 托管了示例 notebooks。另外在 https://sagemaker-examples.readthedocs.io/en/latest/get_started/index.html 提供了说明文档。
+这里以pytorch的mnist为例，让大家学习使用SageMaker Notebook Instance来训练模型。
 
 .. contents::
 
@@ -12,13 +13,14 @@
 
 在 Notebook Instance 控制台页面，点击 **Open JupyterLab** 打开 JupyterLab 页面。
 在菜单栏 **Git** 中，选择 **Clone a Repository**，输入 https://github.com/aws/amazon-sagemaker-examples.git ，等待复制完成。
+为了防止github连不上，我从github拉到了gitee库，输入 https://gitee.com/jaccket628/amazon-sagemaker-examples ，也可从这里拉取。
 在文件夹中可以看到多了 **amazon-sagemaker-examples** ，您可以浏览子文件夹，选择感兴趣的示例
 
 ****************************************************
 运行示例 Notebook
 ****************************************************
 
-比如我们打开 sagemaker-python-sdk/pytorch_mnist 这个文件夹，双击运行 pytorch_mnist.ipynb 这个 Notebook。
+比如我们打开 sagemaker-python-sdk/pytorch_mnist 这个文件夹，双击运行 pytorch_mnist.ipynb 这个 Notebook。注意执行环境要选择conda_amazonei_pytorch_latest_p36。
 每个示例 Notebook 都提供了背景说明、示例数据、示例代码。
 有些时候需要安装依赖包，国内区域可以考虑使用加速镜像站，比如使用 `清华镜像站 <https://mirror.tuna.tsinghua.edu.cn/help/pypi/>`__
 
