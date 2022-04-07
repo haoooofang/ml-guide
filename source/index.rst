@@ -11,7 +11,7 @@
 
 -   `SageMaker Python SDK <https://sagemaker.readthedocs.io/en/stable/index.html>`__
 -   `SageMaker Examples <https://sagemaker-examples.readthedocs.io/en/latest/index.html>`__
--   `SageMaker Immersion Day <https://catalog.us-east-1.prod.workshops.aws/workshops/63069e26-921c-4ce1-9cc7-dd882ff62575/en-US/>`__
+-   `SageMaker Workshop <https://workshops.aws/card/sagemaker>`__
 -   `SageMaker官方文档 <https://docs.aws.amazon.com/zh_cn/sagemaker/latest/dg/whatis.html>`__
 
 

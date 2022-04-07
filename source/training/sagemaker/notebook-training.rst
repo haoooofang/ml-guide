@@ -49,6 +49,19 @@
 - instance_count/instance_type. 训练实例数量和规格。训练任务是跑在单独的实例上，这些实例由 SageMaker 管理。
 - hyperparameters. 传递给训练代码的参数。
 
+使用Spot实例类型
+=================
+使用Spot实例，您最多可节省高达70%的训练成本。
+在开始训练-定义estimator对象中，带上三个参数：
+
+-   use_spot_instances = True
+-   max_run = 3600
+-   max_wait = 7200 if use_spot_instances else None
+
+具体案例参考：
+
+-   `使用Tensorflow竞价实例 <https://sagemaker-examples.readthedocs.io/en/latest/sagemaker-python-sdk/managed_spot_training_tensorflow_estimator/managed_spot_training_tensorflow_estimator.html?highlight=spot>`__
+
 调用 estimator 的 ``fit`` 方法开始训练过程，通过 ``channel`` 指定数据位置。
 可以在 cell 下看到日志输出。与此同时，控制台 ``Training`` 页面也会出现这个训练任务。在 CloudWatch Logs 中还可以看到不同训练实例办理出的日志信息。
 
