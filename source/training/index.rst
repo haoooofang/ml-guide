@@ -14,3 +14,4 @@
    使用 Notebook Instance 训练模型 <sagemaker/notebook-training>
    使用 SageMaker 自带算法 <sagemaker/builtin-algo>
    扩展 SageMaker PyTorch 容器 <sagemaker/extend-pytorch>
+   超参数调优 <sagemaker/hpo>
